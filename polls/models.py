@@ -1,5 +1,7 @@
 
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 
 class Question(models.Model):
@@ -51,11 +53,23 @@ class Book(models.Model):
     objects=BookManager()
     man = BookManager()
 
+    comments = GenericRelation('Comment',related_query_name='book')
+
+
+
 class BookGanre(models.Model):
 
     book = models.ForeignKey(Book,on_delete=models.CASCADE)
     ganre = models.ForeignKey(Ganre,on_delete=models.CASCADE)   
     date_add = models.DateField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    text = models.CharField(max_length=150)
+    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    object_id = models.IntegerField()
+
+    content_object = GenericForeignKey('content_type','object_id')
 
 def FillDB():
     a1 = Author.objects.create(first_name='A',last_name='B')

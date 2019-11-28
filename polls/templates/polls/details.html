@@ -2,11 +2,18 @@
 
 <form action="/{{question.id}}/vote" method="post">
 {%csrf_token%}
-{%for choice in question.choice_set.all%}
-<input type="radio" name="choice" id="choice{{forloop.counter}}" value="{{choice.id}}">
-<label for="choice{{forloop.counter}}">
-{{choice.choice_text}}
-</label><br>
-{%endfor%}
+    {{form}}
+    {% for field in form %}
+    <div>
+        {{field.value}}
+        {{field.help_text}}
+        {{field.errors}}
+        {{field.html_name}}
+    </div>
+        
+    {% endfor %}
+
+    {{ form.question }}
+    <label for="{{ field.id_for_label}}">{{field.label}}</label>
 <input type="submit" value="Vote">
 </form>
